@@ -61,18 +61,10 @@ class AmentPlugin implements Plugin<Project> {
     // Since the Android plugin is not part of the standard Gradle
     // distribution, we need to check at runtime if it has been loaded, and if
     // not, disregard any Android-specific code
-    def androidAppPluginClass = null
-    try {
-      androidAppPluginClass = Class.forName(
-        'com.android.build.gradle.AppPlugin')
-    } catch(ClassNotFoundException) { }
-
-    if (androidAppPluginClass != null) {
-
+    if(project.hasProperty('android')) {
       project.plugins.withType(com.android.build.gradle.AppPlugin) {
+
         project.android {
-          compileSdkVersion 22
-          buildToolsVersion "23.0.3"
           if (project.hasProperty('ament.build_space')) {
             project.buildDir = project.file(
               project.getProperty('ament.build_space'))
@@ -94,7 +86,7 @@ class AmentPlugin implements Plugin<Project> {
 
           project.buildDir = buildSpaceDir
 
-          project.task('deployArtifacts') << {
+          project.task('deployArtifacts').doLast {
             project.copy {
               description = "Copy artifacts to the install space"
 

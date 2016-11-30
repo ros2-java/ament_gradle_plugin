@@ -19,7 +19,7 @@ repositories {
 }
 
 group = 'org.ros2.tools.gradle'
-version = '0.1.0'
+version = '0.2.0'
 
 uploadArchives {
   repositories {
@@ -30,8 +30,8 @@ uploadArchives {
 dependencies {
   compile gradleApi()
   compile localGroovy()
-  compile 'com.android.tools.build:gradle:2.2.0+'
-  runtime 'com.android.tools.build:gradle:2.2.0+'
+  compile 'com.android.tools.build:gradle:2.2.2'
+  runtime 'com.android.tools.build:gradle:2.2.2'
 }
 
 pluginBundle {
