@@ -126,11 +126,21 @@ class AmentPlugin implements Plugin<Project> {
               }
 
               // TODO(esteve): expand this to support other STL libraries
-              def stlLibraryPath = [
-                androidNDK, 'sources', 'cxx-stl', 'gnu-libstdc++', '4.9',
-                'libs', androidABI, 'lib' + androidSTL + '.so'
-              ].join(File.separator)
-
+              def stlLibraryPath
+              switch (androidSTL) {
+                case 'gnustl_shared':
+                  stlLibraryPath = [
+                    androidNDK, 'sources', 'cxx-stl', 'gnu-libstdc++', '4.9',
+                    'libs', androidABI, 'lib' + androidSTL + '.so'
+                  ].join(File.separator)
+                  break
+                case 'c++_shared':
+                  stlLibraryPath = [
+                    androidNDK, 'sources', 'cxx-stl', 'llvm-libc++',
+                    'libs', androidABI, 'lib' + androidSTL + '.so'
+                  ].join(File.separator)
+                  break
+              }
               from stlLibraryPath
             }
 
