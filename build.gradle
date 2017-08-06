@@ -9,7 +9,7 @@ buildscript {
     }
   }
   dependencies {
-    classpath "com.gradle.publish:plugin-publish-plugin:0.9.6"
+    classpath "com.gradle.publish:plugin-publish-plugin:0.9.7"
   }
 }
 
@@ -19,7 +19,7 @@ repositories {
 }
 
 group = 'org.ros2.tools.gradle'
-version = '0.5.0'
+version = '0.5.1'
 
 uploadArchives {
   repositories {
