@@ -158,7 +158,10 @@ class AndroidAmentPluginExtension extends BaseAmentPluginExtension {
               ].join(File.separator)
           def ft = project.fileTree(
             dir: fp,
-            include: ['*.so', 'jni/*.so'])
+            include: ['*.so'])
+          ft += project.fileTree(
+            dir: [fp, 'jni'].join(File.separator),
+            include: ['*.so'])
           from ft
           into this.stlDestination
         }
