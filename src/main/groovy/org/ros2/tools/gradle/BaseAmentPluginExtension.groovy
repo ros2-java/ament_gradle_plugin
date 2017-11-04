@@ -21,6 +21,7 @@ import org.gradle.api.Project
 class BaseAmentPluginExtension {
   def project
 
+  def sourceSpace
   def buildSpace
   def installSpace
   def dependencies
@@ -30,9 +31,22 @@ class BaseAmentPluginExtension {
 
   def workingDir
 
+  def properties
+  def propertiesFile
+
   BaseAmentPluginExtension(Project project) {
     this.project = project
     this.workingDir = System.getProperty('user.dir')
+    this.properties = new Properties()
+    this.sourceSpace = project.findProperty('ament.source_space')
+    if (this.sourceSpace != null) {
+      this.propertiesFile = project.file([this.sourceSpace, 'gradle.properties'].join(File.separator))
+    } else {
+      this.propertiesFile = project.file('gradle.properties')
+    }
+    if (this.propertiesFile.exists()) {
+      this.properties.load(this.propertiesFile.newDataInputStream())
+    }
 
     this.buildSpace = project.findProperty('ament.build_space')
     this.installSpace = project.findProperty('ament.install_space')
@@ -48,6 +62,22 @@ class BaseAmentPluginExtension {
   def createCheckAmentPropertiesTask() {
     return this.project.task('checkAmentProperties').doLast {
       this.check()
+    }
+  }
+
+  def setProperties() {
+    this.properties.setProperty('ament.build_space', this.buildSpace)
+    this.properties.setProperty('ament.install_space', this.installSpace)
+    this.properties.setProperty('ament.dependencies', this.dependencies)
+    this.properties.setProperty('ament.package_manifest.name', this.packageManifestName)
+    this.properties.setProperty('ament.gradle_recursive_dependencies', String.valueOf(this.gradleRecursiveDependencies))
+    this.properties.setProperty('ament.exec_dependency_paths_in_workspace', this.execDependencyPathsInWorkspace)
+  }
+
+  def createStoreAmentPropertiesTask() {
+    return this.project.task('storeAmentPropertiesTask').doLast {
+      this.setProperties()
+      this.properties.store(this.propertiesFile.newWriter(), null)
     }
   }
 

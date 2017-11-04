@@ -125,8 +125,11 @@ class JavaAmentPluginExtension extends BaseAmentPluginExtension {
 
       def checkAmentPropertiesTask = createCheckAmentPropertiesTask()
 
+      def storeAmentPropertiesTask = createStoreAmentPropertiesTask()
+      storeAmentPropertiesTask.dependsOn checkAmentPropertiesTask
+
       project.tasks.withType(AbstractCompile) {
-        compileTask -> compileTask.dependsOn checkAmentPropertiesTask
+        compileTask -> compileTask.dependsOn storeAmentPropertiesTask
       }
     }
   }

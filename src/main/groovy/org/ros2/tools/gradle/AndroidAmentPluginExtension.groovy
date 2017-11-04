@@ -53,6 +53,14 @@ class AndroidAmentPluginExtension extends BaseAmentPluginExtension {
     this.androidVariant = checkProperty('ament.android_variant')
   }
 
+  def setProperties() {
+    super.setProperties()
+    this.properties.setProperty('ament.android_stl', this.androidSTL)
+    this.properties.setProperty('ament.android_abi', this.androidABI)
+    this.properties.setProperty('ament.android_ndk', this.androidNDK)
+    this.properties.setProperty('ament.android_variant', this.androidVariant)
+  }
+
   def isValid() {
     return super.isValid() && this.androidSTL != null && this.androidABI != null &&
       this.androidNDK != null && this.androidVariant != null
@@ -201,8 +209,12 @@ class AndroidAmentPluginExtension extends BaseAmentPluginExtension {
       })
 
       def checkAmentPropertiesTask = createCheckAmentPropertiesTask()
+
+      def storeAmentPropertiesTask = createStoreAmentPropertiesTask()
+      storeAmentPropertiesTask.dependsOn checkAmentPropertiesTask
+
       def cleanNativeLibsTask = createCleanNativeLibsTask()
-      cleanNativeLibsTask.dependsOn checkAmentPropertiesTask
+      cleanNativeLibsTask.dependsOn storeAmentPropertiesTask
 
       def copyNativeLibsTask = createCopyNativeLibsTask()
       copyNativeLibsTask.dependsOn cleanNativeLibsTask
