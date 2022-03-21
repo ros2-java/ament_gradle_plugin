@@ -1,12 +1,13 @@
 apply plugin: 'com.gradle.plugin-publish'
 apply plugin: 'groovy'
-apply plugin: 'maven'
+apply plugin: 'maven-publish'
 
 buildscript {
   repositories {
     maven {
       url "https://plugins.gradle.org/m2/"
     }
+    google()
   }
   dependencies {
     classpath "com.gradle.publish:plugin-publish-plugin:0.9.7"
@@ -16,22 +17,30 @@ buildscript {
 repositories {
   jcenter()
   mavenCentral()
+  google()
 }
 
-group = 'org.ros2.tools.gradle'
-version = '0.7.0'
+group = 'gradle.plugin.org.ros2.tools.gradle'
+version = '0.7.1'
 
-uploadArchives {
+
+publishing{
+  publications {
+    mavenJava(MavenPublication) {
+      artifactId = 'ament'
+      from components.java
+    }
+  }
   repositories {
-    mavenLocal()
+    maven {
+      url = uri('/home/lan/Public/repo')
+    }
   }
 }
 
 dependencies {
-  compile gradleApi()
-  compile localGroovy()
-  compile 'com.android.tools.build:gradle:2.3.3'
-  runtime 'com.android.tools.build:gradle:2.3.3'
+  implementation gradleApi()
+  implementation localGroovy()
 }
 
 pluginBundle {

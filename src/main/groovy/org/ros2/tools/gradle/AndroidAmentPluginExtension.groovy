@@ -83,7 +83,7 @@ class AndroidAmentPluginExtension extends BaseAmentPluginExtension {
       packageDependencies = this.execDependencyPathsInWorkspace.split(':') as Set
     }
 
-    def compileDeps = project.getConfigurations().getByName("compile").getDependencies()
+    def compileDeps = project.getConfigurations().getByName("implementation").getDependencies()
     def fileDeps = project.files(packageDependencies.collect {
       project.fileTree(dir: [it, 'java'].join(File.separator),
           include: '*.jar',
