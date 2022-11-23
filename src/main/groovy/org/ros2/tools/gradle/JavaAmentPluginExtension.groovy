@@ -54,7 +54,7 @@ class JavaAmentPluginExtension extends BaseAmentPluginExtension {
   }
 
   def updateJavaDependencies() {
-    def compileDeps = project.getConfigurations().getByName('compile').getDependencies()
+    def compileDeps = project.getConfigurations().getByName('implementation').getDependencies()
     def fileDeps = project.files(project.ament.dependencies.split(':').collect {
       project.fileTree(dir: [it, 'java'].join(File.separator), include: '*.jar')
     })
